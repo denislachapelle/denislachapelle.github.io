@@ -3,6 +3,19 @@
 <meta content="text/html; charset=ISO-8859-1"
 http-equiv="content-type">
 <title>Denis Lachapelle Personal Web Space</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+.project-images {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr));
+  gap: 24px;
+  max-width: 1100px;
+  margin: 24px 0;
+}
+.project-images figure { margin: 0; }
+.project-images img { display: block; max-width: 100%; height: auto; }
+.project-images figcaption { margin-top: 8px; line-height: 1.4; }
+</style>
 </head>
 <body>
 <img src="https://media.licdn.com/dms/image/v2/C4E03AQE-sdaK0d1EHw/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1631568681496?e=1793232000&amp;v=beta&amp;t=45ia8h_hz350CmXXvmWWRFfdwzBX2FPdqL9KmTuPA24" alt="Denis Lachapelle" width="200" height="200"><br>
@@ -10,6 +23,70 @@ I am living in Québec Canada near Montréal.<br>
 I am an electrical engineer with a strong expertise in electronics, real time software, signal processing.<br>
 I am mostly retired.<br>
 I ran my high technologies consulting business for over 30 years.<br>
+<section aria-labelledby="electromagnetics-heading">
+<h2 id="electromagnetics-heading">Electromagnetics with Finite Element Method</h2>
+<p> My goal here was to learn about finite element method, so I decide to model some electromagnetic effects. So the results may not be fully reliable</p>
+<p>I use the MFEM finite element library to explore electromagnetic fields and signal propagation.
+My projects cover three-dimensional PCB trace simulations, transmission line models, and skin and proximity effects in conductors.
+The source code and technical documents are available on GitHub.</p>
+
+<h3>Three-dimensional PCB trace simulation</h3>
+<p>My PCB simulation project models transient electromagnetic propagation along a trace, including its conducting ground plane,
+dielectric, surrounding air, voltage source, and resistive load. PCB geometry are created and meshed with GMSH python scripts.
+The fully coupled solver advances the electric field and magnetic flux density together using MFEM, MPI, and hypre,
+with backward Euler or Crank&ndash;Nicolson time stepping.</p>
+<p>The documented examples explore signal reflections caused by openings in the ground plane and show fields and current
+distributions around bends and U-shaped traces. The program records input and output voltages and exports fields for visualization in ParaView.</p>
+<div class="project-images">
+<figure>
+<a href="assets/images/electromagnetics/pcb-trace.png"><img src="assets/images/electromagnetics/pcb-trace.png" alt="Three-dimensional geometry of a straight PCB trace over a ground plane with ports at both ends" width="1031" height="503" loading="lazy"></a>
+<figcaption>PCB trace and ground-plane geometry prepared with Gmsh.</figcaption>
+</figure>
+<figure>
+<a href="assets/images/electromagnetics/pcb-magnetic-field.png"><img src="assets/images/electromagnetics/pcb-magnetic-field.png" alt="Magnetic field spreading from left to right along the PCB trace" width="1536" height="190" loading="lazy"></a>
+<figcaption>Magnetic field propagation after 400 ps, from a documented development run.</figcaption>
+</figure>
+</div>
+<p><a href="https://github.com/denislachapelle/pcbtltsim">Source code</a> &middot;
+<a href="https://github.com/denislachapelle/pcbtltsim/blob/master/doc/pcbtltsim_fully_coupled.pdf">Technical document (PDF)</a> &middot;
+<a href="https://github.com/denislachapelle/pcbtltsim/blob/master/doc/pcbtltsim_fully_coupled.tex">LaTeX source</a></p>
+
+<h3>Transmission line modeling</h3>
+<p>I developed finite element models of the telegrapher's equations to follow voltage and current along a transmission line.
+The formulation includes distributed resistance, inductance, capacitance, and conductance, together with source and load resistances.
+My LaTeX notes derive the weak formulation and matrix equations and describe time stepping with MFEM's backward Euler solver.</p>
+<p>Examples use a 100 m RG-58 cable with step, pulse, and sinusoidal signals to study propagation, attenuation,
+and reflections with different load terminations.</p>
+<div class="project-images">
+<figure>
+<a href="assets/images/electromagnetics/transmission-matched.png"><img src="assets/images/electromagnetics/transmission-matched.png" alt="Ten plots showing voltage and current propagating along a 100 metre RG-58 cable with a 50 ohm load" width="927" height="774" loading="lazy"></a>
+<figcaption>Voltage and current propagation along a 100 m RG-58 cable terminated with 50 ohms.</figcaption>
+</figure>
+<figure>
+<a href="assets/images/electromagnetics/transmission-reflections.png"><img src="assets/images/electromagnetics/transmission-reflections.png" alt="Ten plots showing voltage and current reflections along a 100 metre RG-58 cable with a 2 ohm load" width="928" height="778" loading="lazy"></a>
+<figcaption>A 2 ohm load produces reflections as the signal reaches the end of the same cable.</figcaption>
+</figure>
+</div>
+<p><a href="https://github.com/denislachapelle/transmissionline">Source code</a> &middot;
+<a href="https://github.com/denislachapelle/transmissionline/blob/master/doc/stltfe1d_05.tex">LaTeX notes</a></p>
+
+<h3>Skin and proximity effects</h3>
+<p>My two-dimensional conductor models compute skin and proximity effects, DC and AC resistance, and inductance.
+The project includes a round-wire skin-effect model and a model for one or more groups of wires.
+A mesh generator supports round, AWG-sized, and rectangular conductors, with specified positions and current phases.
+Examples visualize magnetic fields and current density, including a three-phase wire arrangement.</p>
+<div class="project-images">
+<figure>
+<a href="assets/images/electromagnetics/wire-magnetic-field.jpg"><img src="assets/images/electromagnetics/wire-magnetic-field.jpg" alt="Surface plots of the real and imaginary components of magnetic vector potential A around conductors" width="852" height="452" loading="lazy"></a>
+<figcaption>Real and imaginary components of the magnetic vector potential around conductors.</figcaption>
+</figure>
+<figure>
+<a href="assets/images/electromagnetics/wire-current-density.jpg"><img src="assets/images/electromagnetics/wire-current-density.jpg" alt="Current density surface plot for three conductors carrying three-phase currents" width="383" height="640" loading="lazy"></a>
+<figcaption>Current density in a three-phase wire arrangement.</figcaption>
+</figure>
+</div>
+<p><a href="https://github.com/denislachapelle/proximityeffect">Source code and examples</a></p>
+</section>
 <br>
 <br>
 <br>
